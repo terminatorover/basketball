@@ -12,7 +12,8 @@ class Player:
         self.score = score
         self.time = 0 
 
-        
+    def get_name(self):
+        return self.name
 
     def get_score (self):
         return self.score 
@@ -46,8 +47,8 @@ def add_draft( player, array):
                 continue 
         elif ( 1<= i < len(array) -2):
             cond1 =not(better (array[i],player))#if it's true then player should be next
-            cond2  = better( array[i+1],player))
-            if (con1 and cond2):
+            cond2  = better( array[i+1],player)
+            if (cond1 and cond2):
                 array.insert(i,player)
                 return 
             else:
@@ -62,11 +63,11 @@ def to_bench( on_field):
     current_longest = 0 
     for player in on_field :
         if player.get_time() >  current_longest:
-            del out[:]
-            out.append(player)
+            del out1[:]
+            out1.append(player)
             current_longest = player.get_time()
         elif player.get_time()==  current_longest:
-            out.append(player)
+            out1.append(player)
         else:
             continue 
     if len(out1)== 1:
@@ -74,7 +75,7 @@ def to_bench( on_field):
     
     out2 =[]
     current_score = 0 
-    while player in out:
+    while player in out2:
         if player.get_score() < current_score:
             del out2[:]
             out2.append(player)
@@ -89,7 +90,7 @@ def to_bench( on_field):
 
     out3 = []
     current_height = 0 
-    while player in out2:
+    while player in out3:
         if player.get_height() < current_height:
             del out3[:]
             out3.append(player)
@@ -108,11 +109,11 @@ def to_field( on_bench):
     current_longest = 100000000000000000000000000000000000000000000000000 
     for player in on_bench :
         if player.get_time() <  current_longest:
-            del out[:]
-            out.append(player)
+            del out1[:]
+            out1.append(player)
             current_longest = player.get_time()
         elif player.get_time()==  current_longest:
-            out.append(player)
+            out1.append(player)
         else:
             continue 
     if len(out1)== 1:
@@ -120,7 +121,7 @@ def to_field( on_bench):
     
     out2 =[]
     current_score = 0 
-    while player in out:
+    for player in out2:
         if player.get_score() > current_score:
             del out2[:]
             out2.append(player)
@@ -135,7 +136,7 @@ def to_field( on_bench):
 
     out3 = []
     current_height = 0 
-    while player in out2:
+    for  player in out3:
         if player.get_height() > current_height:
             del out3[:]
             out3.append(player)
@@ -166,7 +167,7 @@ def is_stats( str):
     return True 
 def make_player(str):
     #given a str makes a player ojbect 
-    list = split(str)
+    list = str.split()
     name = list[0]
     height = list[1]
     score = list[2]
@@ -174,26 +175,110 @@ def make_player(str):
     return Player(name,height,score,0)
     
         
+def two_teams( draft):
+    #retruns an array of two arrays 
+    team_even = draft[0:len(draft)-1:2]
+    team_odd = draft[1:len(draft)-1:2]
+    return [team_odd,team_even]
 
+def on_feilders( team,p):
+    selected = []
+    on_field = team[:p]
+    on_bench = team[p:]
+    return [on_field,on_bench]
+    
+        
+    
+def find_remove(p,array):
+    index = 0
+    print "remove the player by the name: " + p.get_name() + " Score: " + p.get_score()
+    for player in array:
+#        print "remove the player by the name: " + player.get_name() + " Score: " + player.get_score()
+        if( (player.get_score() == p.get_score()) and (player.get_height() == p.get_height())):
+            del array[index]
+            break 
+        else:
+            index += 1 
+            
+        
+    
 input_file = open("input.txt","r+")
 output_file = open("output.txt","w+")
 
 
 first = 0
 draft_array = []
+N =0 
+M = 0
+P =0
+case = 0 
 for line in input_file.readlines():
+    print line
     if ( first == 0 ):
         first = 1
     elif is_stats(line):
         list = line.split()
-        N = list[0]
-        M = list[1]
-        P = list[2]
+        N = int(list[0])
+        M = int(list[1])
+        P = int(list[2])
+        print "N:" + str(N) +" M:" + str(M)
     else:
+
         a_player = make_player(line)
         add_draft(a_player,draft_array)
     ##the 
     if ( len(draft_array) == N ):
+        #got the teams split 
+        team_even = two_teams(draft_array)[0]
+        team_odd = two_teams(draft_array)[1]
+        #got the people on the field 
+        on_field_even = on_feilders(team_even, P)[0]
+        on_field_odd = on_feilders(team_odd, P)[0]
+        #got the people on the bench 
+        benched_even =  on_feilders(team_even,P)[1]
+        
+        benched_odd =  on_feilders(team_odd,P)[1]
+        for i in range(M):
+            #increment the time 
+            add_time(on_field_even)
+            add_time(on_field_odd)
+            
+            to_bench_odd = to_bench(on_field_odd)
+            to_bench_even = to_bench(on_field_even)
+            
+            in_for_odd = to_field(benched_even)
+            in_for_even = to_field(benched_odd)
+            
+#            print "%s is in for team odd"%sin_for_odd.get_name()
+            print "alsdjflsadkjfasdf " + str(in_for_odd.get_name())
+            #remove the players from the bench 
+            find_remove(in_for_odd,benched_odd)
+            find_remove(in_for_even,benched_even)
+            
+            #remove players form the field
+            find_remove(to_bench_odd,on_field_odd)
+            find_remove(to_bench_even,on_field_even)
+
+            #add the going out players to their respective benches 
+            benched_odd.append(to_bench_odd)
+            benched_even.append(to_bench_even)
+            
+            #add the going in players to their respctive fields 
+            on_field_even.append(in_for_even)
+            on_field_odd.append(in_for_odd)
+           
+        on_field_even.extend(on_field_odd)
+        on_field_names = ""
+        for player in on_field_even:
+            enter = player.get_name() + " " 
+            on_field_names + enter 
+        
+        output_file.write("Case #%s: %s"%(case,on_field_names))
+        case += 1
+        
+            
+            
+
         
         
         
