@@ -213,7 +213,7 @@ M = 0
 P =0
 case = 0 
 for line in input_file.readlines():
-    print line
+#    print line
     if ( first == 0 ):
         first = 1
     elif is_stats(line):
@@ -221,14 +221,21 @@ for line in input_file.readlines():
         N = int(list[0])
         M = int(list[1])
         P = int(list[2])
-        print "N:" + str(N) +" M:" + str(M)
+
     else:
 
         a_player = make_player(line)
         add_draft(a_player,draft_array)
     ##the 
     if ( len(draft_array) == N ):
+#        print "N:" + str(N) +" M:" + str(M)
         #got the teams split 
+        draft_No = 0 
+        ##-----------------drafted players and their order 
+        for player in draft_array:
+            print "Name: " + player.get_name() + " Draft NO: " + str(draft_No) +" Score: " + player.get_score()
+            draft_No  += 1 
+        ##----------------drafeter players and their order 
         team_even = two_teams(draft_array)[0]
         team_odd = two_teams(draft_array)[1]
         #got the people on the field 
