@@ -11,7 +11,9 @@ class Player:
         self.height = height
         self.score = score
         self.time = 0 
+
         
+
     def get_score (self):
         return self.score 
     def get_time(self):
@@ -154,5 +156,46 @@ def add_time( array):
     for player in array:
         player.more_time()
 
+def is_stats( str):
+    #given a str checks if we have the stat file or not
+    list = str.split()
+    for char in list:
+        if (len(char)!=1):
+            return False
+
+    return True 
+def make_player(str):
+    #given a str makes a player ojbect 
+    list = split(str)
+    name = list[0]
+    height = list[1]
+    score = list[2]
+    time = 0 
+    return Player(name,height,score,0)
+    
+        
+
+input_file = open("input.txt","r+")
+output_file = open("output.txt","w+")
 
 
+first = 0
+draft_array = []
+for line in input_file.readlines():
+    if ( first == 0 ):
+        first = 1
+    elif is_stats(line):
+        list = line.split()
+        N = list[0]
+        M = list[1]
+        P = list[2]
+    else:
+        a_player = make_player(line)
+        add_draft(a_player,draft_array)
+    ##the 
+    if ( len(draft_array) == N ):
+        
+        
+        
+        
+        
