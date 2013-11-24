@@ -62,28 +62,52 @@ def add_draft_2( player, array):
     for player in array:
         names.append(player.get_name())
 
-    print names 
 
-def add_draft(player1, array):
-    score_player_set = {}
-    if len(array)==0:
-        score = player1.get_score()
+def order_h( player_arr):
+    height_player_dic = {}
+    height_index = []
+    for player in player_arr:
+        tall = player.get_height()
+        height_index.append(tall)
+        height_player_dic[tall] = player
+    
+    height_index.sort()
+    new_arr  = []
+    for height in height_index:
+        new_arr.append(height_player_dic[height])
+    player_arr = new_arr
+
+def add_draft(player1, score_player_set):
+
+    if len(score_player_set)==0:
+        score = int(player1.get_score())
         score_player_set[score]=[ player1]
     else :
-        for player in array:
-      #  print player.get_name()
-            score = player.get_score()
-            if score in score_player_set:
-                score_player_set[score].append(player)
-            else:
-                score_player_set[score]=[ player]
-    #order each set based on height 
-    print score_player_set
-#    increasing_order = score_player_set.keys()
- #   print type(increasing_order[0])
-  #  for score in increasing_order.sort():
-   #     print "X"
+        score = int(player1.get_score())
+        if score in score_player_set:
+            score_player_set[score].append(player1)
+            order_h(score_player_set[score])
+        else:
+            score_player_set[score]=[ player1]
+    
+def no_players( dic):
+    count = 0 
+    score_list = dic.keys()
+    score_list.sort()
+    for score in score_list:
+        count += len(dic[score])
+    return count 
 
+def arraify( dic ):
+    array = []
+    score_list = dic.keys()
+    score_list.sort()
+    for score in score_list:
+        array.extend(dic[score])
+    return array 
+
+        
+    
 
         
 
@@ -247,6 +271,7 @@ output_file = open("output.txt","w+")
 
 first = 0
 draft_array = []
+draft_dic = {}
 N = 10000000000000000000000000000000000000000000000000
 M = 10000000000000000000000000000000000000000000000000
 P = 10000000000000000000000000000000000000000000000000
@@ -270,11 +295,12 @@ for line in input_file.readlines():
         if len(line)>2:
             print " player to be added and stats: " + line 
             a_player = make_player(line)
-            add_draft(a_player,draft_array)
-            print len(draft_array)
+            add_draft(a_player,draft_dic)
+
             #print "N:" + str(N) +" M:" + str(M) + "len of draft array: %s"%len(draft_array)
     #-------------------computation ---------------------------------------
-    if ( len(draft_array) == N ):
+    if ( no_players(draft_dic) == N ):
+        draft_array = arraify(draft_dic)
         
     
         #got the teams split 
