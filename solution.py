@@ -114,7 +114,7 @@ def arraify( dic ):
 
 
 
-def to_bench( on_field):
+def to_bench_2( on_field):
     ##returns the player that will be sent to the bench 
     out1 = []
     current_longest = 0 
@@ -160,6 +160,33 @@ def to_bench( on_field):
     if len(out3)==1:
         return out3[0]
         
+def to_bench(on_field, p_d):
+    #take in an array of players on the field and returns the player to go out
+    time_players = {}
+
+    for player in on_field:
+        time = player.get_time()
+        if time in time_players:
+            time_players[time].append(player)
+        else:
+            time_players[time]=[player]
+    
+    times = time_players.keys()
+    times.sort()
+    longest_time = times[len(times)-1]
+    possible_people = time_players[longest_time]
+    if len(possible_people) == 1:
+        return possible_people[0]
+    else:
+        worst_player =  possible_people[0]
+        for player in possible_people:
+            if ( p_d[player] > p_d[worst_player]):
+                worst_player = player
+
+    return worst_player
+            
+            
+
 def to_field( on_bench):
     ##returns the player that will be sent to the bench 
     out1 = []
@@ -254,7 +281,8 @@ def on_feilders( team,p):
     
 def find_remove(p,array):
     index = 0
-    print "remove the player by the name: " + p.get_name() + " Score: " + p.get_score()
+    print p
+#    print "remove the player by the name: " + p.get_name() + " Score: " + p.get_score()
     for player in array:
 #        print "remove the player by the name: " + player.get_name() + " Score: " + player.get_score()
         if( (player.get_score() == p.get_score()) and (player.get_height() == p.get_height())):
@@ -301,8 +329,17 @@ for line in input_file.readlines():
     #-------------------computation ---------------------------------------
     if ( no_players(draft_dic) == N ):
         draft_array = arraify(draft_dic)
+        draft_array.reverse()
+        #have a player to draft number dic 
+        draft_index = 0 
+        player_to_no = {}
+        for player in draft_array:
+            player_to_no[player]= draft_index
+            draft_index += 1 
+##  printing the players and their draft numbers      
+        for player in player_to_no:
+            print "Player name: %s Draft_no: %s"%(player.get_name(),player_to_no[player])
         
-    
         #got the teams split 
         draft_No = 0 
         ##-----------------drafted players and their order 
@@ -324,18 +361,18 @@ for line in input_file.readlines():
             add_time(on_field_even)
             add_time(on_field_odd)
             
-            to_bench_odd = to_bench(on_field_odd)
-            to_bench_even = to_bench(on_field_even)
+            to_bench_odd = to_bench(on_field_odd,player_to_no)
+            to_bench_even = to_bench(on_field_even,player_to_no)
             
             in_for_odd = to_field(benched_odd)
             in_for_even = to_field(benched_even)
             
 #            print "%s is in for team odd"%sin_for_odd.get_name()
-            print "alsdjflsadkjfasdf " + str(in_for_odd.get_name())
+#            print "player to go in for ODD: " + str(in_for_odd.get_name())
             #remove the players from the bench 
             find_remove(in_for_odd,benched_odd)
             find_remove(in_for_even,benched_even)
-            
+            print "player to go out for ordd: " + str(to_bench_odd.get_name())
             #remove players form the field
             find_remove(to_bench_odd,on_field_odd)
             find_remove(to_bench_even,on_field_even)
