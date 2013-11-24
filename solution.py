@@ -35,27 +35,60 @@ def better( p1 , p2):
     elif ( p1.get_height() < p1.get_height()):
         return False
 
-def add_draft( player, array):
+def add_draft_2( player, array):
+#    print player.get_name()
     if len(array)== 0 :
         array.append(player)
     for i in range(len(array)):
         if i==0:
             if better( array[i],player):
-                array.insert(i,player)
-                return 
+#                array.insert(i,player)
+                array.append(player)
+     #           return 
             else:
                 continue 
         elif ( 1<= i < len(array) -2):
-            cond1 =not(better (array[i],player))#if it's true then player should be next
-            cond2  = better( array[i+1],player)
+            cond1 =(better (array[i],player))#if it's true then player should be next
+            cond2  = not (better( array[i+1],player)) 
             if (cond1 and cond2):
-                array.insert(i,player)
-                return 
+                array.insert(i+1,player)
+    #            return 
             else:
                 continue
         elif (i == (len(array) -1)) :
             array.append(player)
-            return 
+   #         return 
+    names = []
+    for player in array:
+        names.append(player.get_name())
+
+    print names 
+
+def add_draft(player1, array):
+    score_player_set = {}
+    if len(array)==0:
+        score = player1.get_score()
+        score_player_set[score]=[ player1]
+    else :
+        for player in array:
+      #  print player.get_name()
+            score = player.get_score()
+            if score in score_player_set:
+                score_player_set[score].append(player)
+            else:
+                score_player_set[score]=[ player]
+    #order each set based on height 
+    print score_player_set
+#    increasing_order = score_player_set.keys()
+ #   print type(increasing_order[0])
+  #  for score in increasing_order.sort():
+   #     print "X"
+
+
+        
+
+
+
 
 def to_bench( on_field):
     ##returns the player that will be sent to the bench 
@@ -214,35 +247,41 @@ output_file = open("output.txt","w+")
 
 first = 0
 draft_array = []
-N =0 
-M = 0
-P =0
+N = 10000000000000000000000000000000000000000000000000
+M = 10000000000000000000000000000000000000000000000000
+P = 10000000000000000000000000000000000000000000000000
 case = 0 
 for line in input_file.readlines():
     print line
     if ( first == 0 ):
         first = 1
-    elif is_stats(line) and (len(line)> 0):
+    elif is_stats(line) and (len(line)> 2):
         print "print once"
         list = line.split()
+        print list 
         N = int(list[0])
         M = int(list[1])
         P = int(list[2])
+#        draft_array = []
 #        print line 
     else:
 ##        print line
 #        print is_stats(line )
         if len(line)>2:
+            print " player to be added and stats: " + line 
             a_player = make_player(line)
             add_draft(a_player,draft_array)
-    ##the 
+            print len(draft_array)
+            #print "N:" + str(N) +" M:" + str(M) + "len of draft array: %s"%len(draft_array)
+    #-------------------computation ---------------------------------------
     if ( len(draft_array) == N ):
-#        print "N:" + str(N) +" M:" + str(M)
+        
+    
         #got the teams split 
         draft_No = 0 
         ##-----------------drafted players and their order 
         for player in draft_array:
-#            print "Name: " + player.get_name() + " Draft NO: " + str(draft_No) +" Score: " + player.get_score()
+            print "Name: " + player.get_name() + " Draft NO: " + str(draft_No) +" Score: " + player.get_score()
             draft_No  += 1 
         ##----------------drafeter players and their order 
         team_even = two_teams(draft_array)[0]
@@ -288,6 +327,7 @@ for line in input_file.readlines():
         
         print "done with iterations" 
         for player in on_field_even:
+            print "WTF"
             enter = player.get_name() + " " 
             on_field_names +=  enter 
             print "number of people on the field %s"% len(on_field_names)
