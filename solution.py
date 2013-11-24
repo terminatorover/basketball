@@ -160,11 +160,17 @@ def add_time( array):
 def is_stats( str):
     #given a str checks if we have the stat file or not
     list = str.split()
+#    print "the line is " + line 
+#    print "the line is of length:%s "%len(str)
+    if len(str) < 3 :
+        return False 
     for char in list:
-        if (len(char)!=1):
-            return False
-
+        if char.isdigit() == False:
+            return False 
+    
     return True 
+
+
 def make_player(str):
     #given a str makes a player ojbect 
     list = str.split()
@@ -213,19 +219,22 @@ M = 0
 P =0
 case = 0 
 for line in input_file.readlines():
-#    print line
+    print line
     if ( first == 0 ):
         first = 1
-    elif is_stats(line):
+    elif is_stats(line) and (len(line)> 0):
+        print "print once"
         list = line.split()
         N = int(list[0])
         M = int(list[1])
         P = int(list[2])
-
+#        print line 
     else:
-
-        a_player = make_player(line)
-        add_draft(a_player,draft_array)
+##        print line
+#        print is_stats(line )
+        if len(line)>2:
+            a_player = make_player(line)
+            add_draft(a_player,draft_array)
     ##the 
     if ( len(draft_array) == N ):
 #        print "N:" + str(N) +" M:" + str(M)
@@ -233,7 +242,7 @@ for line in input_file.readlines():
         draft_No = 0 
         ##-----------------drafted players and their order 
         for player in draft_array:
-            print "Name: " + player.get_name() + " Draft NO: " + str(draft_No) +" Score: " + player.get_score()
+#            print "Name: " + player.get_name() + " Draft NO: " + str(draft_No) +" Score: " + player.get_score()
             draft_No  += 1 
         ##----------------drafeter players and their order 
         team_even = two_teams(draft_array)[0]
@@ -253,8 +262,8 @@ for line in input_file.readlines():
             to_bench_odd = to_bench(on_field_odd)
             to_bench_even = to_bench(on_field_even)
             
-            in_for_odd = to_field(benched_even)
-            in_for_even = to_field(benched_odd)
+            in_for_odd = to_field(benched_odd)
+            in_for_even = to_field(benched_even)
             
 #            print "%s is in for team odd"%sin_for_odd.get_name()
             print "alsdjflsadkjfasdf " + str(in_for_odd.get_name())
@@ -276,14 +285,18 @@ for line in input_file.readlines():
            
         on_field_even.extend(on_field_odd)
         on_field_names = ""
+        
+        print "done with iterations" 
         for player in on_field_even:
             enter = player.get_name() + " " 
-            on_field_names + enter 
-        
-        output_file.write("Case #%s: %s"%(case,on_field_names))
+            on_field_names +=  enter 
+            print "number of people on the field %s"% len(on_field_names)
+            output_file.write("Case #%s: %s\n"%(case,on_field_names))
         case += 1
         
-            
+
+output_file.close()
+input_file.close()
             
 
         
