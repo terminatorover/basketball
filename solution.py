@@ -247,7 +247,7 @@ def to_field( on_bench):
 def add_time( array):
     #given an array of people on the bench or the field this increments their time 
     for player in array:
-        print "add time for %s"%player.get_name()
+#        print "add time for %s"%player.get_name()
         player.more_time()
 
 def is_stats( str):
@@ -322,7 +322,7 @@ draft_dic = {}
 N = 10000000000000000000000000000000000000000000000000
 M = 10000000000000000000000000000000000000000000000000
 P = 10000000000000000000000000000000000000000000000000
-case = 0 
+case = 1
 for line in input_file.readlines():
     print line
     if ( first == 0 ):
@@ -402,8 +402,10 @@ for line in input_file.readlines():
         benched_odd =  on_feilders(team_odd,P)[1]
         
         ##odd players and even players on the field at the start
+        '''
         on_e = ""
         on_o = ""
+        
         for e_p in on_field_even:
 #            print "even player on the the field %s"% e_p.get_name()
             on_e += " %s "%e_p.get_name()
@@ -413,11 +415,24 @@ for line in input_file.readlines():
         
         print "On field for odd -**********************%s"%on_o
         print "On field for  even-**********************%s"%on_e
+'''
         for i in range(M):
             #increment the time 
-            remove_non_player(on_field_even)
+            on_e = ""
+            on_o = ""
+            for e_p in on_field_even:
+            #            print "even player on the the field %s"% e_p.get_name()
+                on_e += " %s "%e_p.get_name()
+
+            for o_p in on_field_odd:
+                on_o += " %s "%o_p.get_name()
+        
+            print "On field for odd -**********************%s"%on_o
+            print "On field for  even-**********************%s"%on_e
+
 #            for player in on_field_even :
 #                print "Player Name : %s"% player.get_name() 
+            
             add_time(on_field_even)
             add_time(on_field_odd)
             
@@ -446,18 +461,22 @@ for line in input_file.readlines():
             on_field_odd.append(in_for_odd)
            
         on_field_even.extend(on_field_odd)
-        on_field_names = ""
+        on_field_names = []
         
         print "done with iterations" 
         for player in on_field_even:
             print "WTF"
-            enter = player.get_name() + " " 
-            on_field_names +=  enter 
-            print "number of people on the field %s"% len(on_field_names)
-            output_file.write("Case #%s: %s\n"%(case,on_field_names))
-        case += 1
+            on_field_names.append(player.get_name())
         
+        
+        on_field_names.sort()#lexographic ordering 
+        names_to_return = ""
+        for name in on_field_names:
+            names_to_return += "%s "%name
+            
 
+        output_file.write("Case #%s: %s\n"%(case,names_to_return ))
+        case += 1
 output_file.close()
 input_file.close()
             
