@@ -346,11 +346,13 @@ for line in input_file.readlines():
 
             #print "N:" + str(N) +" M:" + str(M) + "len of draft array: %s"%len(draft_array)
     #-------------------computation ---------------------------------------
-    if ( no_players(draft_dic) == N-1 ):
-        print "------------------------ONCE1----------------------------------"
+    if ( no_players(draft_dic) == N and len(line)>2):
+        le = len(line)
+        print "------------------------ONCE3----------------------------------" + line + str(le)
         draft_array = arraify(draft_dic)
         draft_array.reverse()
         remove_non_player(draft_array)
+
         #have a player to draft number dic 
         draft_index = 0 
         player_to_no = {}#PLAYER TO DRAFT NO INDEX
