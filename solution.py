@@ -346,7 +346,8 @@ for line in input_file.readlines():
 
             #print "N:" + str(N) +" M:" + str(M) + "len of draft array: %s"%len(draft_array)
     #-------------------computation ---------------------------------------
-    if ( no_players(draft_dic) == N ):
+    if ( no_players(draft_dic) == N-1 ):
+        print "------------------------ONCE1----------------------------------"
         draft_array = arraify(draft_dic)
         draft_array.reverse()
         remove_non_player(draft_array)
