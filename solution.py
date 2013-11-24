@@ -102,8 +102,13 @@ def arraify( dic ):
     array = []
     score_list = dic.keys()
     score_list.sort()
+    me = Player("Robera","11","100",0)
     for score in score_list:
-        array.extend(dic[score])
+#        array.extend(dic[score])
+        for player in dic[score]:
+            if type(me)==type(player):
+                array.append(player)
+            
     return array 
 
         
@@ -172,8 +177,11 @@ def to_bench(on_field, p_d):
             time_players[time]=[player]
     
     times = time_players.keys()
+#    print times
     times.sort()
-    longest_time = times[len(times)-1]
+    le = len(times)
+
+    longest_time = times[-1]
     possible_people = time_players[longest_time]
     if len(possible_people) == 1:
         return possible_people[0]
@@ -239,6 +247,7 @@ def to_field( on_bench):
 def add_time( array):
     #given an array of people on the bench or the field this increments their time 
     for player in array:
+        print "add time for %s"%player.get_name()
         player.more_time()
 
 def is_stats( str):
@@ -267,8 +276,8 @@ def make_player(str):
         
 def two_teams( draft):
     #retruns an array of two arrays 
-    team_even = draft[0:len(draft)-1:2]
-    team_odd = draft[1:len(draft)-1:2]
+    team_even = draft[0::2]
+    team_odd = draft[1::2]
     return [team_odd,team_even]
 
 def on_feilders( team,p):
@@ -281,7 +290,7 @@ def on_feilders( team,p):
     
 def find_remove(p,array):
     index = 0
-    print p
+#    print p
 #    print "remove the player by the name: " + p.get_name() + " Score: " + p.get_score()
     for player in array:
 #        print "remove the player by the name: " + player.get_name() + " Score: " + player.get_score()
@@ -291,7 +300,17 @@ def find_remove(p,array):
         else:
             index += 1 
             
+def remove_non_player(array):
+    me = Player("Robera","11","100",0)
+    index = 0 
+    for player in array:
+        if type(player) != type(me):
+            del array[index] 
+        else:
+            index += 1
         
+            
+
     
 input_file = open("input.txt","r+")
 output_file = open("output.txt","w+")
@@ -321,7 +340,7 @@ for line in input_file.readlines():
 ##        print line
 #        print is_stats(line )
         if len(line)>2:
-            print " player to be added and stats: " + line 
+#            print " player to be added and stats: " + line 
             a_player = make_player(line)
             add_draft(a_player,draft_dic)
 
@@ -330,15 +349,20 @@ for line in input_file.readlines():
     if ( no_players(draft_dic) == N ):
         draft_array = arraify(draft_dic)
         draft_array.reverse()
+        remove_non_player(draft_array)
         #have a player to draft number dic 
         draft_index = 0 
-        player_to_no = {}
+        player_to_no = {}#PLAYER TO DRAFT NO INDEX
         for player in draft_array:
+            
             player_to_no[player]= draft_index
             draft_index += 1 
+
 ##  printing the players and their draft numbers      
         for player in player_to_no:
-            print "Player name: %s Draft_no: %s"%(player.get_name(),player_to_no[player])
+           print "Player name: %s Draft_no: %s"%(player.get_name(),player_to_no[player])
+
+
         
         #got the teams split 
         draft_No = 0 
@@ -349,15 +373,44 @@ for line in input_file.readlines():
         ##----------------drafeter players and their order 
         team_even = two_teams(draft_array)[0]
         team_odd = two_teams(draft_array)[1]
+#        '''
+        
+
+        #trying to check if the teams are right 
+        team_odd_str = ""
+        team_even_str = ""
+        for o_p in team_odd:
+ #           print "player on team odd--------------> %s"%o_p.get_name()
+            team_odd_str += (" %s "%o_p.get_name() )
+        for e_p in team_even:
+#            print "player on team even --------------> %s"%e_p.get_name()
+            team_even_str += (" %s "%e_p.get_name())
+
+        print "Team even:--------------------------> %s\n"% team_odd_str
+        print "Team odd:----------------------------> %s\n"% team_even_str
+ #       '''
         #got the people on the field 
         on_field_even = on_feilders(team_even, P)[0]
         on_field_odd = on_feilders(team_odd, P)[0]
+        
         #got the people on the bench 
         benched_even =  on_feilders(team_even,P)[1]
         
         benched_odd =  on_feilders(team_odd,P)[1]
+        
+        ##odd players and even players on the field at the start
+        '''
+        for e_p in on_field_even:
+            print "even player on the the field %s"% e_p.get_name()
+        print "No of odd players on the field -----------> %s"% len(on_field_odd)
+        for o_p in on_field_odd:
+            print "odd player on the field::::::::::::::: %s"% o_p.get_name()
+        '''
         for i in range(M):
             #increment the time 
+            remove_non_player(on_field_even)
+            for player in on_field_even :
+                print "Player Name : %s"% player.get_name() 
             add_time(on_field_even)
             add_time(on_field_odd)
             
@@ -372,7 +425,7 @@ for line in input_file.readlines():
             #remove the players from the bench 
             find_remove(in_for_odd,benched_odd)
             find_remove(in_for_even,benched_even)
-            print "player to go out for ordd: " + str(to_bench_odd.get_name())
+#            print "player to go out for ordd: " + str(to_bench_odd.get_name())
             #remove players form the field
             find_remove(to_bench_odd,on_field_odd)
             find_remove(to_bench_even,on_field_even)
