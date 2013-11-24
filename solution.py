@@ -347,8 +347,8 @@ for line in input_file.readlines():
             #print "N:" + str(N) +" M:" + str(M) + "len of draft array: %s"%len(draft_array)
     #-------------------computation ---------------------------------------
     if ( no_players(draft_dic) == N and len(line)>2):
-        le = len(line)
-        print "------------------------ONCE3----------------------------------" + line + str(le)
+
+        print "------------------------ONCE3----------------------------------" 
         draft_array = arraify(draft_dic)
         draft_array.reverse()
         remove_non_player(draft_array)
@@ -402,18 +402,22 @@ for line in input_file.readlines():
         benched_odd =  on_feilders(team_odd,P)[1]
         
         ##odd players and even players on the field at the start
-        '''
+        on_e = ""
+        on_o = ""
         for e_p in on_field_even:
-            print "even player on the the field %s"% e_p.get_name()
-        print "No of odd players on the field -----------> %s"% len(on_field_odd)
+#            print "even player on the the field %s"% e_p.get_name()
+            on_e += " %s "%e_p.get_name()
+
         for o_p in on_field_odd:
-            print "odd player on the field::::::::::::::: %s"% o_p.get_name()
-        '''
+            on_o += " %s "%o_p.get_name()
+        
+        print "On field for odd -**********************%s"%on_o
+        print "On field for  even-**********************%s"%on_e
         for i in range(M):
             #increment the time 
             remove_non_player(on_field_even)
-            for player in on_field_even :
-                print "Player Name : %s"% player.get_name() 
+#            for player in on_field_even :
+#                print "Player Name : %s"% player.get_name() 
             add_time(on_field_even)
             add_time(on_field_odd)
             
