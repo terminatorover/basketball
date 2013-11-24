@@ -334,6 +334,7 @@ for line in input_file.readlines():
         N = int(list[0])
         M = int(list[1])
         P = int(list[2])
+        draft_dic = {}
 #        draft_array = []
 #        print line 
     else:
@@ -348,7 +349,7 @@ for line in input_file.readlines():
     #-------------------computation ---------------------------------------
     if ( no_players(draft_dic) == N and len(line)>2):
 
-        print "------------------------ONCE3----------------------------------" 
+        print "------------------------ONCE4----------------------------------" 
         draft_array = arraify(draft_dic)
         draft_array.reverse()
         remove_non_player(draft_array)
@@ -362,13 +363,16 @@ for line in input_file.readlines():
             draft_index += 1 
 
 ##  printing the players and their draft numbers      
+            '''
         for player in player_to_no:
            print "Player name: %s Draft_no: %s"%(player.get_name(),player_to_no[player])
 
 
         
         #got the teams split 
+        '''
         draft_No = 0 
+        
         ##-----------------drafted players and their order 
         for player in draft_array:
             print "Name: " + player.get_name() + " Draft NO: " + str(draft_No) +" Score: " + player.get_score()
