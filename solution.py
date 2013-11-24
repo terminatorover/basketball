@@ -194,8 +194,35 @@ def to_bench(on_field, p_d):
     return worst_player
             
             
+def to_field( on_bench, p_d):
+    time_players = {}
 
-def to_field( on_bench):
+    for player in on_bench:
+        time = player.get_time()
+        if time in time_players:
+            time_players[time].append(player)
+        else:
+            time_players[time]=[player]
+    
+    times = time_players.keys()
+#    print times
+    times.sort()
+    le = len(times)
+
+    shortest_time = times[0]
+    possible_people = time_players[shortest_time]
+    if len(possible_people) == 1:
+        return possible_people[0]
+    else:
+        best_player =  possible_people[0]
+        for player in possible_people:
+            if ( p_d[player] < p_d[best_player]):
+                best_player = player
+
+    return best_player
+
+
+def to_field2( on_bench):
     ##returns the player that will be sent to the bench 
     out1 = []
     current_longest = 100000000000000000000000000000000000000000000000000 
@@ -289,7 +316,11 @@ def on_feilders( team,p):
         
     
 def find_remove(p,array):
+    remove_non_player(array)
     index = 0
+    me = Player("Robera","11","100",0)
+    if (type(me)!=type(p)):
+        print "We DON'T HAVE  A PLAYER "
 #    print p
 #    print "remove the player by the name: " + p.get_name() + " Score: " + p.get_score()
     for player in array:
@@ -366,8 +397,6 @@ for line in input_file.readlines():
             '''
         for player in player_to_no:
            print "Player name: %s Draft_no: %s"%(player.get_name(),player_to_no[player])
-
-
         
         #got the teams split 
         '''
@@ -443,12 +472,13 @@ for line in input_file.readlines():
             to_bench_odd = to_bench(on_field_odd,player_to_no)
             to_bench_even = to_bench(on_field_even,player_to_no)
             
-            in_for_odd = to_field(benched_odd)
-            in_for_even = to_field(benched_even)
+            in_for_odd = to_field(benched_odd,player_to_no)
+            in_for_even = to_field(benched_even,player_to_no)
             
 #            print "%s is in for team odd"%sin_for_odd.get_name()
 #            print "player to go in for ODD: " + str(in_for_odd.get_name())
             #remove the players from the bench 
+            
             find_remove(in_for_odd,benched_odd)
             find_remove(in_for_even,benched_even)
 #            print "player to go out for ordd: " + str(to_bench_odd.get_name())
