@@ -1,6 +1,6 @@
 #usr/bin/python 
 
-
+from tabulate import tabulate
     
 
 unvisited = []
@@ -14,15 +14,18 @@ def data( W, N,c_towns):
     
     #distance from start, node /distance, #initializing 
     dis_start = {}
-    
+#    table = [ [0 for x in range(W)]for y in range(N)]
+ #   print table 
     no = 1
     node_cord = {}
     cord_node = {}
-    
+    node_start = {}
     possible_towns  = [] 
     for x in range(W+1):
+        
         for y in range(N+1) :
             if (x,y) in c_towns:
+                print "0 "
                 continue 
             else:
                 possible_towns.append((x,y))
@@ -30,14 +33,20 @@ def data( W, N,c_towns):
                 node_cord[no]=(x,y)
                 cord_node[(x,y)]=no 
                 if (  (x,y)== (0,0)):
+                    print "x "
                     dis_start[no] = 0
+                    node_start[no] = []
                 else:
+                    print "- "
                     dis_start[no] = 1000000000000000000000000000000000000000000000000000000000
+                    node_start[no] = []
                 no += 1
 
                 
-    print [possible_towns,node_cord,cord_node,dis_start]
+                
+    return  [possible_towns,node_cord,cord_node,dis_start,node_start]
 
+data(5,5,[3,1])
 def unvisited_neighbours(town, unvisited):
     x = town[0]
     y = town[1]
@@ -50,18 +59,22 @@ def unvisited_neighbours(town, unvisited):
     return u_n #a list of (x,y) coordinates
             
 
-def update_distance( univisited, town, dis_start,no_cord,cord_no):
+def update_distance( univisited, town, dis_start,node_start,no_cord,cord_no):
     #UPDATES DISTANCE
 
     to_update_neighbours = unvisited_neighbours(town, unvisited)
     no_town = cord_no[town]
     c_d = dis_start[no_town]#the distance from the start to our current town
+    c_ns = node_start[no_town]#the nodes to the current town
     
     for n in to_update_neighbours:
         no = cord_no[n]#get the node number for the neighbour 
         dis_neigh = dis_start[no]#get the current shortest distance to the neighbour
+
         if ( (c_d+1) < dis_neigh ):
             dis_start[no]= c_d + 1
+            node_start[no] = c_ns.append(no)
+            
             
 def next_node(dis_start,no_cord):
     #returns node number not coordinate 
@@ -81,8 +94,16 @@ def next_node(dis_start,no_cord):
                 
 
 def find_remove( cord, unvisited):
-    where = unvisited.index(cord)
-    del unvisited[where]
+    
+    try:
+        where = unvisited.index(cord)
+#        print "UNVISITED %s COORDINATES:%s Where:%s"%(unvisited,cord,where)
+        del unvisited[where]
+#        break 
+        return 
+        
+    except ValueError:
+        print "Cord doesn't exist"
 
 def is_stats(line):
     ls = line.split()
@@ -104,6 +125,7 @@ W = -1
 N = -1
 H = -1
 c_towns = []
+'''
 for line in input_file.readlines():
     #print line + "length of line is %s"%len(line)
     
@@ -126,35 +148,43 @@ for line in input_file.readlines():
             x = int(input[0])
             y = int(input[1])
             c_towns.append((x,y))
-            print "c_towns -------------%s"%c_towns
+#            print "c_towns -------------%s"%c_towns
     
-
-    if ( no_lines == N):
+#    print "no_lines---:%s N-----:%s"%(no_lines,N)
+    if ( int(no_lines) == int(N)):
          #begin computation 
-
-         print "c_towns -------------%s"%c_towns
+         print "////////////////\\\\\\\\\\\\\\\\"
+         print "*****************%s***********"%line
+         #print "c_towns -------------%s"%c_towns
+         #
+#         print "W:%s H:%s N:%s"%(W,H,N) 
          get_data  = data(int(W),int(N),c_towns)
          #setup data 
          unvisited = get_data[0]
          node_cord = get_data[1]
          cord_node = get_data[2]
          dis_start = get_data[3]
+         nodes_start = get_data[4]
          dest = ( int(W),int(N))
          
          current_town = (0,0)
-         update_distance( unvisited, current_town, dis_start,node_cord,cord_node)
-
+         update_distance( unvisited, current_town, dis_start,nodes_start,node_cord,cord_node)
+         
          find_remove( current_town, unvisited)
 
          current_town = next_node(dis_start,node_cord)
+#         print "c_towns **************************-------------%s"%current_town
+         
 
          while ( current_town != dest):
-             update_distance( unvisited, current_town, dis_start,node_cord,cord_node)
+             print "WTF------------------------"
+             update_distance( unvisited, current_town, dis_start,nodes_start,node_cord,cord_node)
 
              find_remove( current_town, unvisited)
 
              current_town = next_node(dis_start,node_cord)
-
+         
+      #   print nodes_start[current_town]
 
 
          
@@ -162,7 +192,7 @@ for line in input_file.readlines():
 
 
 
-            
+            '''
             
 
 
