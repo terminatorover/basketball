@@ -69,16 +69,19 @@ def data( W, N,c_towns):
                 
     return  [possible_towns,node_cord,cord_node,dis_start,node_start]
 
-data(10,3,[(3,1),(10,3)])
+#data(10,3,[(3,1),(10,3)])
 def unvisited_neighbours(town, unvisited):
+    print "UNVISITED" + str( unvisited)
     x = town[0]
     y = town[1]
     u_n = [] #unvisited neighbours
     for i in range(-1,2):
         for j in range(-1,2):
-            if ((x+i,j+1)) in unvisited:
-                u_n.append((x+i,j+1))
-                
+#            print (i,j)
+            print ((x+i,j+y))
+            if (((x+i,j+y) in unvisited) and ( (x,y) != (x+i,y+j))):
+                u_n.append((x+i,j+y))
+    print "for town: " + str(town) + "neighbours are" + str(u_n) 
     return u_n #a list of (x,y) coordinates
             
 
@@ -86,6 +89,7 @@ def update_distance( univisited, town, dis_start,node_start,no_cord,cord_no):
     #UPDATES DISTANCE
 
     to_update_neighbours = unvisited_neighbours(town, unvisited)
+
     no_town = cord_no[town]
     c_d = dis_start[no_town]#the distance from the start to our current town
     path_to_current = node_start[no_town]#the nodes to the current town
@@ -171,7 +175,7 @@ for line in input_file.readlines():
             H = ls[1]
             N = ls[2]
             c_towns = []
-            print "SHOULD BE DESTINATION " + str((W,N))
+
         else:
             print "WTF"
             no_lines += 1
