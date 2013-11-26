@@ -14,39 +14,61 @@ def data( W, N,c_towns):
     
     #distance from start, node /distance, #initializing 
     dis_start = {}
-#    table = [ [0 for x in range(W)]for y in range(N)]
- #   print table 
+    table = [ [0 for x in range(W)]for y in range(N)]
+    table [0][0] = "WTF"
+    table [0][2]= "KKK"
+    table [0][3]= "AAA"
+   # print tabulate(table)
+    
+
     no = 1
     node_cord = {}
     cord_node = {}
     node_start = {}
     possible_towns  = [] 
-    for x in range(W+1):
-        
-        for y in range(N+1) :
+    matrix = []
+    for x in range(N):
+        array = []
+        for y in range(W) :
+            
             if (x,y) in c_towns:
-                print "0 "
+  #              print "0 "
+                array.append("II")
+  #              print str((x,y)) + " 0 " 
+                
                 continue 
             else:
                 possible_towns.append((x,y))
                 #updates the dictionary 
                 node_cord[no]=(x,y)
-                cord_node[(x,y)]=no 
+                cord_node[(y,x)]=no 
                 if (  (x,y)== (0,0)):
-                    print "x "
+#                    print "x "
+                    array.append("x")
+
+ #                   print str((x,y)) + " X " 
+               #     table[x][y]="x"
                     dis_start[no] = 0
                     node_start[no] = []
                 else:
-                    print "- "
+ #                   print "- "
+                    array.append("0")
+#                    print str((x,y)) + " - " 
+                    
+              #      table[y][x]="88"
+                  #  print tabulate(table)
                     dis_start[no] = 1000000000000000000000000000000000000000000000000000000000
                     node_start[no] = []
                 no += 1
-
+        matrix.append(array)
+        
                 
+
+    print tabulate(matrix)
                 
     return  [possible_towns,node_cord,cord_node,dis_start,node_start]
 
-data(5,5,[3,1])
+data(10,3,[3,1])
 def unvisited_neighbours(town, unvisited):
     x = town[0]
     y = town[1]
