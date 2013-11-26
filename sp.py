@@ -63,7 +63,7 @@ def update_distance( univisited, town, dis_start,no_cord,cord_no):
         if ( (c_d+1) < dis_neigh ):
             dis_start[no]= c_d + 1
             
-def next_node(dis_start):
+def next_node(dis_start,no_cord):
     #returns node number not coordinate 
     first = 1 
     shortest = 0
@@ -77,8 +77,12 @@ def next_node(dis_start):
                 s_town = town 
                 shortest = dis_start[town]
 
-    return s_town 
+    return no_cord[s_town]
                 
+
+def find_remove( cord, unvisited):
+    where = unvisited.index(cord)
+    del unvisited[where]
 
 def is_stats(line):
     ls = line.split()
@@ -95,6 +99,11 @@ output_file = open("output.txt","w")
 
 
 first = 0
+no_lines = 0
+W = -1
+N = -1
+H = -1
+c_towns = []
 for line in input_file.readlines():
     #print line + "length of line is %s"%len(line)
     
@@ -111,11 +120,46 @@ for line in input_file.readlines():
             N = ls[2]
             c_towns = []
         else:
-            input = list(line)
+            print "WTF"
+            no_lines += 1
+            input = line.split()
             x = int(input[0])
             y = int(input[1])
             c_towns.append((x,y))
-            
+            print "c_towns -------------%s"%c_towns
+    
+
+    if ( no_lines == N):
+         #begin computation 
+
+         print "c_towns -------------%s"%c_towns
+         get_data  = data(int(W),int(N),c_towns)
+         #setup data 
+         unvisited = get_data[0]
+         node_cord = get_data[1]
+         cord_node = get_data[2]
+         dis_start = get_data[3]
+         dest = ( int(W),int(N))
+         
+         current_town = (0,0)
+         update_distance( unvisited, current_town, dis_start,node_cord,cord_node)
+
+         find_remove( current_town, unvisited)
+
+         current_town = next_node(dis_start,node_cord)
+
+         while ( current_town != dest):
+             update_distance( unvisited, current_town, dis_start,node_cord,cord_node)
+
+             find_remove( current_town, unvisited)
+
+             current_town = next_node(dis_start,node_cord)
+
+
+
+         
+
+
 
 
             
