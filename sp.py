@@ -80,9 +80,46 @@ def next_node(dis_start):
     return s_town 
                 
 
+def is_stats(line):
+    ls = line.split()
+    if (len(ls)) == 3:
+        return True 
+    else:
+        return False 
+        
+    
        
         
+input_file = open("input.txt","r+")
+output_file = open("output.txt","w")
 
+
+first = 0
+for line in input_file.readlines():
+    #print line + "length of line is %s"%len(line)
     
+    if (first == 0):
+        first += 1
+    else:
+        #this is to check if i have an empty line
+        if ( len(line)==1 ):
+            continue 
+        elif (is_stats(line)):
+            ls = line.split()
+            W = ls[0]
+            H = ls[1]
+            N = ls[2]
+            c_towns = []
+        else:
+            input = list(line)
+            x = int(input[0])
+            y = int(input[1])
+            c_towns.append((x,y))
+            
 
-data(1,1,[(1,0),(1,1)])
+
+            
+            
+
+
+
