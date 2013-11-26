@@ -36,7 +36,7 @@ def data( W, N,c_towns):
                 no += 1
 
                 
-    print possible_towns 
+    print [possible_towns,node_cord,cord_node,dis_start]
 
 def unvisited_neighbours(town, unvisited):
     x = town[0]
@@ -51,10 +51,11 @@ def unvisited_neighbours(town, unvisited):
             
 
 def update_distance( univisited, town, dis_start,no_cord,cord_no):
+    #UPDATES DISTANCE
+
     to_update_neighbours = unvisited_neighbours(town, unvisited)
     no_town = cord_no[town]
     c_d = dis_start[no_town]#the distance from the start to our current town
-    
     
     for n in to_update_neighbours:
         no = cord_no[n]#get the node number for the neighbour 
@@ -62,10 +63,26 @@ def update_distance( univisited, town, dis_start,no_cord,cord_no):
         if ( (c_d+1) < dis_neigh ):
             dis_start[no]= c_d + 1
             
+def next_node(dis_start):
+    #returns node number not coordinate 
+    first = 1 
+    shortest = 0
+    for town in dis_start:
+        if (first == 1 ) :
+            first += 1
+            shortest = dis_start[town]
+            s_town = town 
+        else:
+            if ( dis_start[town] < shortest):
+                s_town = town 
+                shortest = dis_start[town]
+
+    return s_town 
+                
+
        
         
-    return 0 
-    
+
     
 
 data(1,1,[(1,0),(1,1)])
