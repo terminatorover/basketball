@@ -14,10 +14,6 @@ def data( W, N,c_towns):
     
     #distance from start, node /distance, #initializing 
     dis_start = {}
-    table = [ [0 for x in range(W)]for y in range(N)]
-    table [0][0] = "WTF"
-    table [0][2]= "KKK"
-    table [0][3]= "AAA"
    # print tabulate(table)
     
 
@@ -27,10 +23,10 @@ def data( W, N,c_towns):
     node_start = {}
     possible_towns  = [] 
     matrix = []
-    for x in range(N):
+    for x in range(N+1):
         array = []
-        for y in range(W) :
-            
+        for y in range(W+1) :
+            print (x,y)
             if (x,y) in c_towns:
   #              print "0 "
                 array.append("II")
@@ -68,7 +64,7 @@ def data( W, N,c_towns):
                 
     return  [possible_towns,node_cord,cord_node,dis_start,node_start]
 
-data(10,3,[3,1])
+data(10,3,[(3,1)])
 def unvisited_neighbours(town, unvisited):
     x = town[0]
     y = town[1]
