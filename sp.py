@@ -5,6 +5,13 @@ from tabulate import tabulate
 
 unvisited = []
 
+def f(list):
+    new_list = []
+    for tuple in list:
+        x = tuple[0]
+        y = tuple[1]
+        new_list.append((x-1,y))
+    return new_list 
 
 def data( W, N,c_towns):
     #you need to create and pass in c_towns from the input file 
@@ -23,32 +30,30 @@ def data( W, N,c_towns):
     node_start = {}
     possible_towns  = [] 
     matrix = []
-    for x in range(N+1):
+    for row in range(N+1):
         array = []
-        for y in range(W+1) :
-            print (x,y)
-            if (x,y) in c_towns:
-  #              print "0 "
-                array.append("II")
-  #              print str((x,y)) + " 0 " 
-                
+        for col in range(W+1) :
+
+            if (col,row) in (c_towns):
+
+                array.append("C_T(%s,%s)"%(col,row))
+  #             
                 continue 
             else:
-                possible_towns.append((x,y))
+                possible_towns.append((col,row))
                 #updates the dictionary 
-                node_cord[no]=(x,y)
-                cord_node[(y,x)]=no 
-                if (  (x,y)== (0,0)):
+                node_cord[no]=(row,col)
+                cord_node[(col,row)]=no 
+                if (  (row,col)== (0,0)):
 #                    print "x "
-                    array.append("x")
+                    array.append("(%s,%s)"%(col,row))
 
- #                   print str((x,y)) + " X " 
-               #     table[x][y]="x"
                     dis_start[no] = 0
                     node_start[no] = []
                 else:
  #                   print "- "
-                    array.append("0")
+                    array.append("(%s,%s)"%(col,row))
+
 #                    print str((x,y)) + " - " 
                     
               #      table[y][x]="88"
@@ -64,7 +69,7 @@ def data( W, N,c_towns):
                 
     return  [possible_towns,node_cord,cord_node,dis_start,node_start]
 
-data(10,3,[(3,1)])
+data(10,3,[(3,1),(10,3)])
 def unvisited_neighbours(town, unvisited):
     x = town[0]
     y = town[1]
@@ -165,7 +170,7 @@ for line in input_file.readlines():
             input = line.split()
             x = int(input[0])
             y = int(input[1])
-            c_towns.append((x,y))
+            c_towns.append((x-1,y-1))
 #            print "c_towns -------------%s"%c_towns
     
 #    print "no_lines---:%s N-----:%s"%(no_lines,N)
