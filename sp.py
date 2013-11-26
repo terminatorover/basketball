@@ -62,9 +62,9 @@ def data( W, N,c_towns):
                     node_start[no] = []
                 no += 1
         matrix.append(array)
-        
-                
-
+    
+    #--------------------TIPPPPPPP---------------------------
+#    matrix[3][10] = 777 #to get the matrix cell at (3,10)
     print tabulate(matrix)
                 
     return  [possible_towns,node_cord,cord_node,dis_start,node_start]
@@ -88,17 +88,23 @@ def update_distance( univisited, town, dis_start,node_start,no_cord,cord_no):
     to_update_neighbours = unvisited_neighbours(town, unvisited)
     no_town = cord_no[town]
     c_d = dis_start[no_town]#the distance from the start to our current town
-    c_ns = node_start[no_town]#the nodes to the current town
-    
+    path_to_current = node_start[no_town]#the nodes to the current town
+
     for n in to_update_neighbours:
         no = cord_no[n]#get the node number for the neighbour 
         dis_neigh = dis_start[no]#get the current shortest distance to the neighbour
 
         if ( (c_d+1) < dis_neigh ):
             dis_start[no]= c_d + 1
-            node_start[no] = c_ns.append(no)
+
+            node_start[n] = path_to_current.append(no_town)
+        elif ( (c_d+1) == dis_neigh ):
+            set_of_paths_to_neighbour = node_start[no]
             
+            node_start[n] = node_start[n].append(path_to_current.append(no_town))
             
+        else:
+            continue 
 def next_node(dis_start,no_cord):
     #returns node number not coordinate 
     first = 1 
@@ -148,7 +154,7 @@ W = -1
 N = -1
 H = -1
 c_towns = []
-'''
+
 for line in input_file.readlines():
     #print line + "length of line is %s"%len(line)
     
@@ -160,17 +166,19 @@ for line in input_file.readlines():
             continue 
         elif (is_stats(line)):
             ls = line.split()
+            print ls
             W = ls[0]
             H = ls[1]
             N = ls[2]
             c_towns = []
+            print "SHOULD BE DESTINATION " + str((W,N))
         else:
             print "WTF"
             no_lines += 1
             input = line.split()
             x = int(input[0])
             y = int(input[1])
-            c_towns.append((x-1,y-1))
+            c_towns.append((x,y))
 #            print "c_towns -------------%s"%c_towns
     
 #    print "no_lines---:%s N-----:%s"%(no_lines,N)
@@ -181,14 +189,14 @@ for line in input_file.readlines():
          #print "c_towns -------------%s"%c_towns
          #
 #         print "W:%s H:%s N:%s"%(W,H,N) 
-         get_data  = data(int(W),int(N),c_towns)
+         get_data  = data(int(W),int(H),c_towns)
          #setup data 
          unvisited = get_data[0]
          node_cord = get_data[1]
          cord_node = get_data[2]
          dis_start = get_data[3]
          nodes_start = get_data[4]
-         dest = ( int(W),int(N))
+         dest = ( int(W),int(H))
          
          current_town = (0,0)
          update_distance( unvisited, current_town, dis_start,nodes_start,node_cord,cord_node)
@@ -198,7 +206,7 @@ for line in input_file.readlines():
          current_town = next_node(dis_start,node_cord)
 #         print "c_towns **************************-------------%s"%current_town
          
-
+         print "DESTINATION******************* %" + str(dest)
          while ( current_town != dest):
              print "WTF------------------------"
              update_distance( unvisited, current_town, dis_start,nodes_start,node_cord,cord_node)
@@ -215,7 +223,7 @@ for line in input_file.readlines():
 
 
 
-            '''
+
             
 
 
